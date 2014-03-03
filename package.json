@@ -1,0 +1,20 @@
+{
+  "name": "SoftSysHW3",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "neo4j": "~1.1.0"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nrubin/SoftSysHW3.git"
+  },
+  "author": "Cory Dolphin and Noam Rubin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nrubin/SoftSysHW3/issues"
+  },
+  "homepage": "https://github.com/nrubin/SoftSysHW3"
+}
