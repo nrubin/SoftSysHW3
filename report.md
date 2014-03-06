@@ -1,4 +1,5 @@
 1. Installation: Is it free?  What license is it under?  Is it easy to install?
+Neo4j actually comes in two different versions, under two very distinct licenses, in both the Neo4j Community and Neo4j Enterprise versions. The free community version is licensed under the permissive and viral GPL. The subscription based, enterprise version is offered on a subscription basis, and licensed under AGPL.
 
 2. Immersion: How hard is it to get started?  Is there good documentation?  Example code?
 
@@ -11,8 +12,8 @@ The system can handle anything from simple lookups by node property to advanced 
 4. Performance: How fast can we process basic queries?  Will the performance scale up to large numbers of concurrent queries?  Can we index the data or precompute partial results to speed things up?
 
 5. ACIDity: What guarantees can the DBMS make regarding data consistency, integrity, and related issues?
+Neo4j is fully ACID compliant, using a transactional model.
 
-neo4j enforces that all data editing happens in transacations, guaranteeing ACIDity.
 
 6. C interface: If we implement the server code in C, we'll need a C API to the DBMS.  How does this API look?  Is it easy to get started?  Does it seem to be mature and reliable?
 
