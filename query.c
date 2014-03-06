@@ -69,10 +69,6 @@ char *post(char *url, char *data, post_write_buffer *s)
     if (res != CURLE_OK)
         fprintf(stderr, "curl_easy_perform() failed: %s\n",
                 curl_easy_strerror(res));
-    if (res == CURLE_OK)
-    {
-        printf("We are good!\n");
-    }
 
     curl_slist_free_all(headers);
     curl_easy_cleanup(curl);
@@ -88,7 +84,6 @@ char *get_node_url(char *actor_name)
     json_t *root, *data, *node_url;
     char *query = (char *) malloc(sizeof(char) * 200);
     char *ret = (char *) malloc(sizeof(char) * 100);
-
     sprintf(query, "{ \"query\" : \"MATCH (n {name: {name}}) RETURN n\", \"params\": { \"name\" : \"%s\" } }", actor_name);
     char url[50] = "http://localhost:7474/db/data/cypher";
 
@@ -99,8 +94,13 @@ char *get_node_url(char *actor_name)
     node_url = json_object_get(data, "self");
 
     char *d = json_string_value(node_url);
+    if (d == NULL)
+    {
+        fprintf(stderr, "Failed to get node_url. Did you type the actor name correctly?\n");
+        exit(EXIT_FAILURE);
+    }
+
     strcpy(ret, d);
-    printf("%s\n", ret);
 
     free(text); //same as free(s->ptr)
     free(query);
@@ -113,15 +113,15 @@ int get_shortest_path(char *origin_node_url, char *dest_node_url)
 {
     post_write_buffer s;
     json_error_t error;
-    json_t *data, *root, *path_length;
+    json_t *root, *path_length;
     int ret;
     char *post_data = (char *) malloc(sizeof(char) * 500);
     char *url = (char *) malloc(sizeof(char) * 200);
 
     sprintf(post_data, "{ \"to\" : \"%s\", \"max_depth\" : 10, \"algorithm\" : \"shortestPath\" }", dest_node_url);
     sprintf(url, "%s/path", origin_node_url);
+
     char *text = post(url, post_data, &s);
-    printf("%s\n", text);
 
     root = json_loads(text, 0, &error);
 
@@ -137,11 +137,30 @@ int get_shortest_path(char *origin_node_url, char *dest_node_url)
 
 }
 
+
+// Truncates the string at the first newline, if there is one.
+void rstrip(char s[])
+{
+    //*ptr points to the location in s where the first \n  occurs
+    char *ptr = strchr(s, '\n');
+    //if \n occurs, replace it with a null terminator to end the string
+    if (ptr)
+    {
+        *ptr = '\0';
+    }
+}
+
 int main(int argc, char *argv[])
 {
-    char *actor1 = get_node_url("Meg Ryan");
-    char *actor2 = get_node_url("Kevin Bacon");
-    int r = get_shortest_path(actor2, actor1);
-    printf("The length of the path is %i\n", r);
+    char origin_actor[80];
+    printf("Enter the full name of the actor for whom you would like the Bacon path:\n");
+    fgets(origin_actor, 80, stdin); //read 80 characters from stdin and store them in search_for
+    rstrip(origin_actor); //strip the trailing line break from the string
+
+    char *origin = get_node_url(origin_actor);
+    char *KevinBacon = get_node_url("Kevin Bacon");
+    
+    int r = get_shortest_path(origin, KevinBacon);
+    printf("%s is %i hops away from Kevin Bacon\n", origin_actor,r);
     return 0;
 }

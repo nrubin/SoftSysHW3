@@ -1,2 +1,2 @@
 query: query.c
-	gcc query.c -lcurl -ljansson -o query
+	gcc query.c -Wall -lcurl -ljansson -o query
