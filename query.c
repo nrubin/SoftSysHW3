@@ -118,11 +118,10 @@ int get_shortest_path(char *origin_node_url, char *dest_node_url)
     char *post_data = (char *) malloc(sizeof(char) * 500);
     char *url = (char *) malloc(sizeof(char) * 200);
 
-    sprintf(post_data, "{ \"to\" : \"%s\", \"max_depth\" : 10, \"algorithm\" : \"shortestPath\" }", dest_node_url);
+    sprintf(post_data, "{ \"to\" : \"%s\", \"max_depth\" : 100, \"algorithm\" : \"shortestPath\" }", dest_node_url);
+
     sprintf(url, "%s/path", origin_node_url);
-
     char *text = post(url, post_data, &s);
-
     root = json_loads(text, 0, &error);
 
     path_length = json_object_get(root, "length");
@@ -158,7 +157,7 @@ int main(int argc, char *argv[])
     rstrip(origin_actor); //strip the trailing line break from the string
 
     char *origin = get_node_url(origin_actor);
-    char *KevinBacon = get_node_url("Kevin Bacon");
+    char *KevinBacon = get_node_url("Bacon, Kevin (I)");
     
     int r = get_shortest_path(origin, KevinBacon);
     printf("%s is %i hops away from Kevin Bacon\n", origin_actor,r);
